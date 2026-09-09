@@ -1,19 +1,35 @@
+from flask import Flask, render_template, jsonify
 import folium
-from folium.plugins import FastMarkerCluster
+import json
 
-# Load GeoJSON for Romania's counties
-romania_geojson = "romania_counties.json"
+app = Flask(__name__)
 
-# Create a base map centered on Romania
-m = folium.Map(location=[46.0, 25.0], zoom_start=7)
+# Load publications data
+with open("data/publication.json", "r") as f:
+    publications_data = json.load(f)
 
-# Add county boundaries
-folium.GeoJson(
-    romania_geojson,
-    name="Romania Counties",
-    style_function=lambda x: {"fillColor": "blue", "color": "black"},
-).add_to(m)
+# Load GeoJSON
+romania_geojson = "static/romania_counties.json"
 
-# Add click events (requires JavaScript)
-# This is a placeholder; actual implementation requires custom JS.
-m.save("romania_map.html")
+@app.route("/")
+def index():
+    # Create a base map
+    m = folium.Map(location=[46.0, 25.0], zoom_start=7)
+
+    # Add GeoJSON with custom JS for click events
+    folium.GeoJson(
+        romania_geojson,
+        name="Romania Counties",
+        style_function=lambda x: {"fillColor": "blue", "color": "black"},
+    ).add_to(m)
+
+    # Save the map to an HTML template
+    m.save("templates/map.html")
+    return render_template("map.html")
+
+@app.route("/api/publications/<county>")
+def get_publications(county):
+    return jsonify(publications_data.get(county, []))
+
+if __name__ == "__main__":
+    app.run(debug=True)
