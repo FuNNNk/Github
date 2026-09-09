@@ -3,12 +3,13 @@ document.addEventListener("DOMContentLoaded", () => {
   const map = L.map("map"); // Assuming Folium initializes this
 
   // Fetch GeoJSON and add click events
-  fetch("/JournalsSite/static/romania_counties.json")
+  fetch("static/romania_counties.json")
     .then((response) => response.json())
     .then((data) => {
       L.geoJSON(data, {
         onEachFeature: (feature, layer) => {
-          const countyName = feature.properties.name;
+          const countyName = feature.properties.NAME_1;
+          console.log(countyName)
           layer.on("click", () => {
             fetchPublications(countyName);
           });
