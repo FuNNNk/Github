@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Publications for {{ county }}</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            line-height: 1.6;
+        }
+        h1 {
+            color: #333;
+        }
+        .publication-list {
+            list-style: none;
+            padding: 0;
+        }
+        .publication-list li {
+            margin-bottom: 10px;
+        }
+        .publication-list a {
+            color: #0066cc;
+            text-decoration: none;
+        }
+        .publication-list a:hover {
+            text-decoration: underline;
+        }
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <h1>Publications for {{ county }}</h1>
+    {% if publications %}
+        <ul class="publication-list">
+            {% for pub in publications %}
+                <li><a href="{{ pub }}" target="_blank">{{ pub }}</a></li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No publications found for {{ county }}.</p>
+    {% endif %}
+    <a href="/" class="back-link">← Back to Map</a>
+</body>
+</html>
